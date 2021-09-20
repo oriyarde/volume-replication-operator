@@ -1,14 +1,20 @@
 name: make dockerx-build-and-push-multi-arch
 
 on:
+  workflow_dispatch:
+    inputs:
+      imageTag:
+        description: 'image tag'
+        required: false
+        default: 'test10'
   push:
-    branches: [ main ]
+    branches: [ add_replication_id_test ]
 
 jobs:
   push:
     name: Push Image
     runs-on: ubuntu-latest
-    if: github.repository == 'csi-addons/volume-replication-operator'
+    if: github.repository == 'oriyarde/volume-replication-operator'
     strategy:
       fail-fast: false
       matrix:
@@ -32,9 +38,9 @@ jobs:
     - name: Login to Quay
       uses: docker/login-action@v1
       with:
-        registry: quay.io
-        username: ${{ secrets.QUAY_USERNAME }}
-        password: ${{ secrets.QUAY_PASSWORD }}
+        registry: docker.io
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: copy volume-replication-operator repo in go src
       run: |
@@ -46,6 +52,7 @@ jobs:
       env:
         GOPATH: /home/runner/go
       run: |
+        export IMG_TAG=${{ github.event.inputs.imageTag }}
         export PATH=$PATH:$GOPATH/bin
         export VERSION="2.3.2"
         wget https://github.com/kubernetes-sigs/kubebuilder/releases/download/v"$VERSION"/kubebuilder_"$VERSION"_linux_amd64.tar.gz

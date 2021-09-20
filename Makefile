@@ -29,8 +29,8 @@ BUNDLE_METADATA_OPTS ?= $(BUNDLE_CHANNELS) $(BUNDLE_DEFAULT_CHANNEL)
 BUNDLE_IMG ?= controller-bundle:$(VERSION)
 
 # Image URL to use all building/pushing image targets
-IMG_NAME ?= quay.io/csiaddons/volumereplication-operator
-IMG_TAG ?= latest
+IMG_NAME ?= csiblock1/replication_sidecar
+IMG_TAG ?= test10
 IMG=${IMG_NAME}:${IMG_TAG}
 image_arch_list=linux/amd64,linux/ppc64le,linux/s390x
 # Produce CRDs that work back to Kubernetes 1.11 (no version conversion)
